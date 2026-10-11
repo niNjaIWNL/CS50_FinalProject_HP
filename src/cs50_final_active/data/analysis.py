@@ -1,6 +1,7 @@
 from cs50_final_active.data.cleaning import load_flights
 from pathlib import Path
 import pandas as pd
+import sqlite3
 
 
 def load_and_clean_flights():
@@ -68,4 +69,37 @@ for (airline, flight_number, origin, destination), flights in total.groupby(
     })
 
 flight_summary = pd.DataFrame(flight_averages)
-print(flight_summary.head(10).to_string(index=False))
+
+# database connection -> instance/flights.sqlite3
+database_flights = Path("instance/flights.sqlite3")
+with sqlite3.connect(database_flights) as connection:
+    cursor = connection.cursor()
+
+    insert_query = '''
+    INSERT INTO flights (airline, number, origin_airport, dest_airport, 
+                total_flights, delayed_dep, delayed_arr, avg_dept, avg_arr, 
+                dep_percentage, arr_percentage)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    '''
+    
+    columns = [
+    "airline_icao",
+    "flight_number",
+    "origin_icao",
+    "destination_icao",
+    "total_flights",
+    "delayed_departures",
+    "delayed_arrivals",
+    "average_departure_delay_minutes",
+    "average_arrival_delay_minutes",
+    "departure_delay_percentage",
+    "arrival_delay_percentage",
+    ]
+
+    rows=flight_summary[columns].astype(object)
+    rows=rows.where(pd.notna(rows), None)
+    
+    cursor.executemany(insert_query, rows.itertuples(index=False, name=None),)
+
+    connection.commit()
+    print("Inserted successfully!")
