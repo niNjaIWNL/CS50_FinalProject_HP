@@ -1,0 +1,410 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+:root {
+  --background: #f7f6f2;
+  --ink: #252820;
+  --muted: #777970;
+  --border: #dddcd4;
+  --accent: #ee622d;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--ink);
+  font-family: "DM Sans", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+.page {
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 48px;
+}
+
+header {
+  min-height: 100px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.brand span {
+  color: var(--accent);
+}
+
+.brand-icon {
+  margin-right: 8px;
+}
+
+nav {
+  font-size: 13px;
+}
+
+.hero {
+  padding: 72px 0 48px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+h1,
+h2,
+.airport-code {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+h1 {
+  margin: 23px 0;
+  font-size: clamp(44px, 5vw, 65px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -3px;
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+.intro {
+  max-width: 400px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.hero-note {
+  margin-top: 26px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.route-map {
+  position: relative;
+  overflow: hidden;
+  background: #efeee8;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.route-map svg {
+  display: block;
+  width: 100%;
+}
+
+.map-caption {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  color: var(--muted);
+  font: 9px monospace;
+  letter-spacing: 1px;
+}
+
+.map-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 17px;
+  color: var(--muted);
+  font: 9px monospace;
+}
+
+.search-panel,
+.result-panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.search-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 22px 27px;
+  border-bottom: 1px solid #eeeee8;
+  font-size: 14px;
+}
+
+.search-heading span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+#flight-form {
+  margin: 0;
+  padding: 10px 15px 25px;
+}
+
+.form-label {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+
+.form-control {
+  height: 50px;
+  background: #fafaf7;
+  border-color: var(--border);
+  border-radius: 5px;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.form-control:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(238 98 45 / 12%);
+}
+
+.form-control::placeholder {
+  color: #93968d;
+}
+
+.search-button {
+  height: 50px;
+  background: var(--accent);
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+}
+
+.search-button:hover,
+.search-button:focus-visible {
+  background: #d95122;
+  color: white;
+}
+
+.search-note,
+.error-message {
+  padding: 0 27px;
+  font-size: 11px;
+}
+
+.search-note {
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+
+.error-message {
+  color: #bd3d19;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 19px 0 45px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.suggestions button {
+  padding: 7px 13px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.suggestions button:hover {
+  background: white;
+  border-color: #999d91;
+}
+
+.result-panel {
+  margin-bottom: 40px;
+  padding: 27px;
+}
+
+.result-panel h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.demo-label {
+  padding: 7px 10px;
+  background: #fff0e6;
+  border-radius: 4px;
+  color: #bd4f26;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.flight-route {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 15px;
+  margin: 28px 0;
+}
+
+.airport-code {
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -2px;
+}
+
+.flight-route p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.flight-line {
+  overflow: hidden;
+  color: var(--accent);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.flight-details {
+  margin: 0;
+  padding: 4px 8px 18px;
+  background: var(--background);
+  border-radius: 5px;
+}
+
+.flight-details small,
+.flight-details strong {
+  display: block;
+}
+
+.flight-details small {
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.flight-details strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.result-note {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.features-section {
+  padding-bottom: 45px;
+}
+
+.features-section h2 {
+  margin-bottom: 28px;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
+}
+
+.features-section .row {
+  padding: 27px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.feature-number {
+  color: #96998d;
+  font: 10px monospace;
+}
+
+.features-section h3 {
+  margin: 20px 0 9px;
+  font-size: 15px;
+}
+
+.features-section p {
+  max-width: 280px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 0 32px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: 0 22px;
+  }
+
+  header {
+    min-height: 80px;
+  }
+
+  .brand {
+    font-size: 22px;
+  }
+
+  nav {
+    font-size: 11px;
+  }
+
+  .hero {
+    padding: 44px 0 30px;
+  }
+
+  .search-heading span {
+    display: none;
+  }
+
+  .result-panel {
+    padding: 20px;
+  }
+
+  .airport-code {
+    font-size: 32px;
+  }
+
+  footer {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
