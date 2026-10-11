@@ -3,6 +3,11 @@ from pathlib import Path
 import pandas as pd
 import sqlite3
 
+""" This script loads and cleans the flights datasets from 'assets'
+    Do not run this script again, as it will re-import the entire datasets,
+    clean the data, calculate delays, and upload data to database
+"""
+
 
 def load_and_clean_flights():
     """ This function loads and cleans each seven datasets"""
