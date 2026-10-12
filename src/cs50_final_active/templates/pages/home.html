@@ -3,303 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Flightline — Before takeoff</title>
-
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
-  <link rel="stylesheet" 
-        href="{{ url_for('static', filename='styles.css') }}"
-  >
-
+  <meta name="description" content="Explore historical departure and arrival delays for your flight with HoldingPattern.">
+  <title>HoldingPattern — Know your flight before you fly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
 <body>
-  <div class="page">
-    <header class="d-flex align-items-center justify-content-between">
-      <a href="#" class="brand">
-        <span class="brand-icon">↗</span> HoldingPattern<span>.</span>
+  <a class="skip-link" href="#search">Skip to flight search</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="{{ url_for('pages.home') }}" aria-label="HoldingPattern home">
+        <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="m4 20 8 2 15-13c2-2 1-5-2-4L13 13 6 10l-3 2 6 5-5 3Z" fill="currentColor"/><path d="M4 27h23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>HoldingPattern</span>
       </a>
-
-      <nav class="d-flex gap-4">
-        <a href="#search">Check delay</a>
-        <a href="#how-it-works">How it works</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-primary" href="#search">Check a flight</a>
+        <a href="#about-data">About the data</a>
       </nav>
-    </header>
-
-    <main>
-      <section class="hero row align-items-center g-5">
-        <div class="col-lg-6">
-          <div class="eyebrow">● YOUR JOURNEY, AT A GLANCE</div>
-
-          <h1>
-            A little clarity.<br>
-            Before <span>takeoff.</span>
-          </h1>
-
-          <p class="intro">
-            Every journey starts with a flight. Find yours and bring
-            your route, airports, flight delay, and weather details into focus.
-          </p>
-
-          <p class="hero-note">✓ One search. All the essentials.</p>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="route-map">
-            <span class="map-caption">A WORLD OF CONNECTIONS</span>
-
-            <svg
-              viewBox="0 0 500 280"
-              role="img"
-              aria-label="Illustrative flight route from New York to London"
-            >
-              <defs>
-                <pattern
-                  id="dots"
-                  width="20"
-                  height="20"
-                  patternUnits="userSpaceOnUse"
-                >
-                  <circle cx="2" cy="2" r="1" fill="#c9ccbf"/>
-                </pattern>
-              </defs>
-
-              <rect width="500" height="280" fill="url(#dots)"/>
-
-              <!-- Stylized land silhouettes -->
-              <g fill="#d8dccf">
-                <path d="M20 65 65 40 110 50 145 80 125 110
-                         100 125 85 165 60 145 40 110Z"/>
-                <path d="M110 160 145 175 165 205 145 240
-                         125 260 110 225 95 190Z"/>
-                <path d="M270 70 300 45 345 55 380 40 435 65
-                         480 95 450 125 410 110 390 145
-                         360 120 325 105 290 115Z"/>
-                <path d="M290 125 325 120 350 155 335 195
-                         310 225 285 175Z"/>
-                <path d="M415 215 455 200 480 225 455 245 420 240Z"/>
-              </g>
-
-              <path
-                d="M125 125 Q230 25 300 90"
-                fill="none"
-                stroke="#ee622d"
-                stroke-width="2"
-                stroke-dasharray="5 5"
-              />
-
-              <g fill="#ee622d">
-                <circle cx="125" cy="125" r="5"/>
-                <circle cx="300" cy="90" r="5"/>
-              </g>
-
-              <g fill="#555d4d" font-size="13" font-family="monospace">
-                <text x="110" y="150">JFK</text>
-                <text x="285" y="115">LHR</text>
-                <text x="225" y="70" fill="#ee622d">✈</text>
-              </g>
-            </svg>
-
-            <div class="map-footer">
-              <span>JFK ─── LHR</span>
-              <span>ILLUSTRATIVE ROUTE</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="search" class="search-panel">
-        <div class="search-heading">
-          <strong>Let's find your flight</strong>
-          <span>The details make the difference.</span>
-        </div>
-
-        <form
-          id="flight-form"
-          action="{{ url_for('pages.search') }}"
-          method="POST"
-        >
-          <div class="row g-3 align-items-end">
-            <div class="col-md-6 col-lg-3">
-              <label for="airline" class="form-label">Airline ICAO</label>
-              <input
-                id="airline"
-                name="airline"
-                class="form-control"
-                placeholder="GLO"
-                required
-              >
-            </div>
-
-            <div class="col-md-6 col-lg-2">
-              <label for="flight" class="form-label">Flight number</label>
-              <input
-                id="flight"
-                name="flight"
-                class="form-control"
-                placeholder="0782"
-                required
-              >
-            </div>
-
-            <div class="col-md-6 col-lg-2">
-              <label for="origin" class="form-label">Origin ICAO</label>
-              <input
-                id="origin"
-                name="origin"
-                class="form-control"
-                placeholder="SBBR"
-                required
-              >
-            </div>
-
-            <div class="col-md-6 col-lg-2">
-              <label for="destination" class="form-label">Destination ICAO</label>
-              <input
-                id="destination"
-                name="destination"
-                class="form-control"
-                placeholder="SBGR"
-                required
-              >
-            </div>
-
-            <div class="col-lg-3">
-              <button type="submit" class="btn search-button w-100">
-                Find flight
-              </button>
-            </div>
-          </div>
-        </form>
-
-      {% if flight_info %}
-        <section id="result" class="result-panel" aria-live="polite">
-          <h2 id="result-title">
-            {{ flight_info.airline }} · {{ flight_info.flight }}
-          </h2>
-
-          <div class="flight-route">
-            <div>
-              <strong class="airport-code">{{ flight_info.origin }}</strong>
-            </div>
-
-            <div class="flight-line">──────── ✈ ────────</div>
-
-            <div class="text-end">
-              <strong class="airport-code">{{ flight_info.destination }}</strong>
-            </div>
-            {% if flight is not none %}
-              <p>
-                This flight departed more than 30 minutes late on
-                {{ "{:.2f}".format(flight["dep_percentage"]) }}% of recorded flights
-                over the first semester of 2026.
-              </p>
-
-              {% if flight["avg_dept"] is not none %}
-                <p>
-                  When delayed, its average departure delay was
-                  {{ "{:.2f}".format(flight["avg_dept"]) }} minutes.
-                </p>
-              {% endif %}
-            {% else %}
-              <p>No historical data found for this flight and route.</p>
-            {% endif %}
-            </div>
-          </section>
-        {% endif %}
-
-        <p id="error" class="error-message" role="alert" hidden></p>
-        <p class="search-note">
-          Use four letters ICAO airport codes. Not sure? Find out at <a href="https://opennav.com/">OpenNav.com</a>
-        </p>
-      </section>
-
-      <div class="suggestions">
-        <span>Flights with biggest delay in the first semester:</span>
-        <button type="button" data-example="0">JFK → LHR · BA 178 ↗</button>
-        <button type="button" data-example="1">GRU → LIS · TP 88 ↗</button>
-        <button type="button" data-example="2">LAX → JFK · AA 10 ↗</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <p class="eyebrow">Historical flight insights</p>
+        <h1 id="hero-title">Know your flight<br>before you fly.</h1>
+        <p class="hero-description">Real historical data. Clear insights.<br>A calmer journey ahead.</p>
       </div>
-
-      <section id="result" class="result-panel" aria-live="polite" hidden>
-        <div class="d-flex justify-content-between align-items-center gap-3">
-          <h2 id="result-title"></h2>
-          <span class="demo-label">DEMO RESULT</span>
+    </section>
+    <div class="container content">
+      <section id="search" class="search-panel" aria-label="Check your flight history">
+        <form id="flight-form" action="{{ url_for('pages.search') }}" method="POST">
+          <div class="form-field">
+            <label for="airline">Airline ICAO</label>
+            <input id="airline" name="airline" type="text" placeholder="GLO" value="{{ flight_info.airline if flight_info else '' }}" required spellcheck="false">
+          </div>
+          <div class="form-field">
+            <label for="flight">Flight number</label>
+            <input id="flight" name="flight" type="text" placeholder="0782" value="{{ flight_info.flight if flight_info else '' }}" required spellcheck="false">
+          </div>
+          <div class="form-field">
+            <label for="origin">Origin ICAO</label>
+            <input id="origin" name="origin" type="text" placeholder="SBBR" value="{{ flight_info.origin if flight_info else '' }}" required spellcheck="false">
+          </div>
+          <div class="form-field">
+            <label for="destination">Destination ICAO</label>
+            <input id="destination" name="destination" type="text" placeholder="SBGR" value="{{ flight_info.destination if flight_info else '' }}" required spellcheck="false">
+          </div>
+          <button class="search-button" type="submit">Check flight <span aria-hidden="true">&rarr;</span></button>
+        </form>
+      </section>
+      {% if flight_info %}
+      <section id="result" class="results" aria-labelledby="result-title" aria-live="polite">
+        <div class="result-heading">
+          <h2 id="result-title" class="eyebrow">Flight history</h2>
+          <span class="flight-reference">{{ flight_info.airline }} &middot; {{ flight_info.flight }}</span>
         </div>
-
         <div class="flight-route">
-          <div>
-            <strong id="from-code" class="airport-code"></strong>
-            <p id="from-name"></p>
+          <div class="airport">
+            <strong class="airport-code">{{ flight_info.origin }}</strong>
+            {% if origin_airport %}
+              <p class="airport-name">{{ origin_airport["name"] }}</p>
+              <p class="airport-city">{{ origin_airport["city"] }}</p>
+            {% else %}
+              <p class="airport-city">Airport details unavailable.</p>
+            {% endif %}
           </div>
-
-          <div class="flight-line">──────── ✈ ────────</div>
-
-          <div class="text-end">
-            <strong id="to-code" class="airport-code"></strong>
-            <p id="to-name"></p>
+          <div class="route-connector" aria-hidden="true">
+            <span class="route-dot"></span><span class="route-line"></span>
+            <svg viewBox="0 0 32 32"><path d="m28 14-10-2-5-10h-3l3 11-7 1-3-4H1l2 6-2 6h2l3-4 7 1-3 11h3l5-10 10-2c4-1 4-3 0-4Z" fill="currentColor"/></svg>
+            <span class="route-line"></span><span class="route-dot"></span>
           </div>
-        </div>
-
-        <div class="row g-3 flight-details">
-          <div class="col-sm-4">
-            <small>Flight number</small>
-            <strong id="flight-detail"></strong>
-          </div>
-          <div class="col-sm-4">
-            <small>Aircraft</small>
-            <strong id="aircraft-detail"></strong>
-          </div>
-          <div class="col-sm-4">
-            <small>Status</small>
-            <strong>Live data unavailable</strong>
+          <div class="airport airport-destination">
+            <strong class="airport-code">{{ flight_info.destination }}</strong>
+            {% if destination_airport %}
+              <p class="airport-name">{{ destination_airport["name"] }}</p>
+              <p class="airport-city">{{ destination_airport["city"] }}</p>
+            {% else %}
+              <p class="airport-city">Airport details unavailable.</p>
+            {% endif %}
           </div>
         </div>
-
-        <p id="result-note" class="result-note"></p>
+        {% if flight is not none %}
+        <div class="statistics">
+          <article class="stat-card" aria-labelledby="departure-title">
+            <div class="stat-heading">
+              <span class="stat-icon" aria-hidden="true">&nearr;</span>
+              <h3 id="departure-title">Departure</h3>
+            </div>
+            <div class="stat-metric">
+              <strong>{{ "{:.2f}".format(flight["dep_percentage"]) }}<span class="unit">%</span></strong>
+              <span class="metric-label">departures delayed</span>
+            </div>
+            <div class="stat-metric">
+              {% if flight["avg_dept"] is not none %}
+                <strong>{{ "{:.0f}".format(flight["avg_dept"]) }} <span class="unit">min</span></strong>
+                <span class="metric-label">average when delayed</span>
+              {% else %}
+                <strong>&mdash;</strong><span class="metric-label">no recorded delays</span>
+              {% endif %}
+            </div>
+          </article>
+          <article class="stat-card" aria-labelledby="arrival-title">
+            <div class="stat-heading">
+              <span class="stat-icon" aria-hidden="true">&searr;</span>
+              <h3 id="arrival-title">Arrival</h3>
+            </div>
+            <div class="stat-metric">
+              <strong>{{ "{:.2f}".format(flight["arr_percentage"]) }}<span class="unit">%</span></strong>
+              <span class="metric-label">arrivals delayed</span>
+            </div>
+            <div class="stat-metric">
+              {% if flight["avg_arr"] is not none %}
+                <strong>{{ "{:.0f}".format(flight["avg_arr"]) }} <span class="unit">min</span></strong>
+                <span class="metric-label">average when delayed</span>
+              {% else %}
+                <strong>&mdash;</strong><span class="metric-label">no recorded delays</span>
+              {% endif %}
+            </div>
+          </article>
+        </div>
+        <p class="result-note">January&ndash;July 2026 &middot; Delayed means more than 30 minutes late.</p>
+        {% else %}
+          <div class="empty-result" role="status">
+            <h3>No historical data found</h3>
+            <p>We couldn't find this flight and route in the dataset. Check the airline ICAO, flight number, and airport codes, then try again.</p>
+          </div>
+        {% endif %}
       </section>
-
-      <section id="how-it-works" class="features-section">
-        <h2>Less searching. More knowing.</h2>
-
-        <div class="row g-4">
-          <article class="col-md-4">
-            <span class="feature-number">01 / THE FLIGHT</span>
-            <h3>Your flight, in focus</h3>
-            <p>
-              Enter your airline and flight number to bring your
-              flight details together in one simple view.
-            </p>
-          </article>
-
-          <article class="col-md-4">
-            <span class="feature-number">02 / THE ROUTE</span>
-            <h3>Connect the dots</h3>
-            <p>
-              See where your journey begins and ends, with airport
-              details and a route overview.
-            </p>
-          </article>
-
-          <article class="col-md-4">
-            <span class="feature-number">03 / THE AIRPORTS</span>
-            <h3>Know your next stop</h3>
-            <p>
-              Turn airport codes into familiar places.
-              Get oriented before you head out the door.
-            </p>
-          </article>
+      {% else %}
+      <section class="search-intro" aria-labelledby="search-intro-title">
+        <p class="eyebrow">A little clarity before takeoff</p>
+        <h2 id="search-intro-title">Every flight has a history.<br>Explore yours.</h2>
+        <p>Enter your flight details to see how often it departed and arrived late, and the average delay when it did.</p>
+      </section>
+      {% endif %}
+      <section id="about-data" class="about-data" aria-labelledby="about-title">
+        <div>
+          <p class="eyebrow">About the data</p>
+          <h2 id="about-title">History, with context.</h2>
+        </div>
+        <div class="about-copy">
+          <p>Insights cover January&ndash;July 2026 and include completed flights with valid scheduled and actual departure and arrival times. Cancelled flights are excluded.</p>
+          <p>A flight counts as delayed when it is more than 30 minutes late. Average minutes refer to those delayed flights. Historical performance does not guarantee your next flight's outcome.</p>
+          <p class="code-help">Use four-letter ICAO airport codes. Need help finding yours? <a href="https://opennav.com/">Look up an airport &nearr;</a></p>
         </div>
       </section>
-    </main>
-
-    <footer>
-      <strong>HoldingPattern.</strong>
-      <span>Made for the journey.</span>
-      <span>Interactive prototype · Sample data</span>
-    </footer>
-  </div>
+    </div>
+  </main>
+  <footer class="container site-footer">
+    <span class="footer-brand">HoldingPattern</span>
+    <span>A calmer journey starts with a little clarity.</span>
+    <span>CS50 Final Project</span>
+  </footer>
 </body>
 </html>

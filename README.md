@@ -1,8 +1,60 @@
-# CS50 Final Project - Flight Log and Delay Prediction
+# HoldingPattern
+#### Video Demo: <URL HERE>
+#### Description:
 
-## Project Overview
-This project will allow users to log their scheduled flights and, based on historical data analysis, predict the likelihood of flight delays. Users can input their flight number, departure and arrival airports. The web app will then provide a prediction of whether the flight is likely to be delayed, along with relevant statistics and insights. The app will also pull and interpret the TAF for the departure and arrivel airports, providing users with a comprehensive overview of their flight's expected conditions.
+HoldingPattern is a flight history web application developed as a CS50 final project. It helps travelers answer a practical question before flying: how often has this flight been delayed, and how long were those delays? Users enter an airline ICAO code, flight number, and origin and destination ICAO airport codes. The application displays historical departure and arrival statistics alongside airport names and cities.
 
-## App Structure and Architecture
-Initial scope -> Python and Flask backend, using PostgreSQL for data storage (flights datasets, user data, etc.). HTML/CSS, JavaScript, and Bootstrap for the frontend. The app will be deployed on a cloud platform (e.g., Heroku or AWS) for accessibility.
+The goal is to turn flight records into understandable information. Departure and arrival are analyzed separately because a flight can leave late and recover time before landing. HoldingPattern presents historical performance, rather than live tracking or a guaranteed prediction of the next flight. Its dataset covers January through July 2026.
+
+## Architecture and system design
+
+The system has two distinct workflows: preparing the historical data and serving user searches. Data preparation runs offline, using Pandas to clean seven monthly CSV files, calculate delays, and aggregate statistics. Those summaries are inserted into a local SQLite database. During normal operation, Flask reads the prepared summaries without repeating the analysis or loading the CSV files.
+
+The web application follows a server-rendered design. A browser submits an HTML form to Flask, which queries SQLite and requests airport details from API Ninjas. Jinja combines the results with the page template and returns HTML to the browser. The API key remains in the backend environment.
+
+SQLite suits the project's local deployment and fixed historical dataset: it stores the summaries in one file without requiring a separate database server. Precomputing both percentages and averages makes searches simple. A composite primary key identifies each combination of airline, flight number, origin, and destination, preventing duplicate summaries.
+
+## Technologies and project structure
+
+The project uses Python 3.14 or newer, Flask for routing, Jinja for HTML rendering, Pandas for data processing, Python's built-in `sqlite3` module for persistence, and Requests for external HTTP calls. uv manages dependencies and the virtual environment, while `uv.lock` records resolved package versions. pytest supports automated checks, and Ruff is available for linting. Waitress is included as a WSGI server dependency.
+
+The main files and directories are:
+
+- `src/cs50_final_active/__init__.py`: defines the Flask application factory and registers the pages blueprint.
+- `src/cs50_final_active/pages.py`: handles the homepage, submitted searches, database lookups, and airport API requests.
+- `src/cs50_final_active/data/cleaning.py`: provides the reusable CSV cleaning function.
+- `src/cs50_final_active/data/analysis.py`: combines datasets, calculates summaries, and inserts them into SQLite.
+- `src/cs50_final_active/templates/pages/home.html`: renders the search form, airport details, and result cards.
+- `src/cs50_final_active/static/`: contains the CSS and cloud background image.
+- `assets/`: holds the seven source CSV files.
+- `instance/flights.sqlite3`: stores the prepared flight summaries.
+- `tests/`: contains cleaning, database, route-analysis, homepage, and API-related checks.
+
+## Data cleaning and calculations
+
+The cleaner reads semicolon-separated CSVs, skips the initial update notice, and handles UTF-8 encoding. It keeps only records marked `REALIZADO`, excluding cancelled or uncompleted flights. Scheduled and actual departure and arrival values are converted to datetime objects. Records missing any valid timestamp are discarded. Flight numbers remain strings to preserve leading zeros.
+
+For each retained flight, departure delay is actual departure minus scheduled departure; arrival delay uses the corresponding arrival timestamps. Durations are converted to total minutes. A flight is classified as delayed only when the difference exceeds 30 minutes. Exactly 30 minutes does not qualify.
+
+Records are grouped by airline ICAO, flight number, origin, and destination. Each summary contains total flights, delayed departure and arrival counts, their percentages, and average delay durations. Percentages equal delayed flights divided by total retained flights, multiplied by 100. Duration averages include only qualifying delays and use their full duration: a 45-minute delay contributes 45 minutes. Missing averages become SQL `NULL` when no flights qualify.
+
+## Search experience
+
+`GET /` displays the homepage. `POST /search` trims and uppercases submitted values, then performs a parameterized query for the exact flight and route. API Ninjas' `/v1/airports` endpoint supplies airport names and cities through ICAO lookups authenticated with an `X-Api-Key` header.
+
+The responsive frontend uses navy typography, blue accents, a cloud hero, and a floating search form. Separate departure and arrival cards display percentages and average minutes. Missing summaries produce a clear message, and missing airport details have a fallback. Historical coverage and the delay threshold are explained on the page.
+
+## Running and verification
+
+From the project root, install dependencies and start Flask:
+
+```powershell
+uv sync
+$env:AIRPORTS_API = "your-api-ninjas-key"
+uv run flask --app cs50_final_active run --debug
+```
+
+The application requires the prepared SQLite database. Its `flights` table must exist before the one-time analysis script runs. That script inserts records on execution; rerunning it against populated data can cause primary-key conflicts. The ignored `instance/` directory and API key must be configured separately on another machine.
+
+Database tests compare stored percentages with counts and reconstruct counts from cleaned CSVs. Run those read-only checks with `uv run pytest tests/test_database.py -v`. Results describe completed flights with valid timestamps; cancellations and excluded records are outside the reported percentages.
 
