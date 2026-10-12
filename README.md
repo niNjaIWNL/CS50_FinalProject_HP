@@ -15,6 +15,8 @@ The system has two distinct workflows:
 
 SQLite suits the project's local deployment and fixed historical dataset: it stores the summaries in one file without requiring a separate database server. Precomputing both percentages and averages makes searches simple. A composite primary key identifies each combination of airline, flight number, origin, and destination, preventing duplicate summaries.
 
+OpenAI Codex was used with model ChatGPT-6.1 Sol to generate code snippets for assistance and speed, assist with debugging, and provide explanations. The model was prompted with the project description, system design, architecture details, code snippets, and questions about Python, Flask, Pandas, SQLite, and Jinja2. The generated code was reviewed and tested before integration.
+
 ## Technologies and project structure
 
 The project uses Python for backend development, Flask for HTTP requests routing, Jinja2 for HTML rendering, Python/pandas for data processing, Python's built-in `sqlite3` module for database management and query, and Requests for external REST APIs HTTP calls. UV manages dependencies and the virtual environment, while `uv.lock` records resolved package versions. Pytest supports automated checks, and Ruff is available for linting. Waitress is included as a WSGI deploymentserver dependency.
