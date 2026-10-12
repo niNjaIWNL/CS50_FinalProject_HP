@@ -43,16 +43,10 @@
             <label for="flight">Flight number</label>
             <input id="flight" name="flight" type="text" placeholder="0782" value="{{ flight_info.flight if flight_info else '' }}" required spellcheck="false">
           </div>
-          <div class="form-field">
-            <label for="origin">Origin ICAO</label>
-            <input id="origin" name="origin" type="text" placeholder="SBBR" value="{{ flight_info.origin if flight_info else '' }}" required spellcheck="false">
-          </div>
-          <div class="form-field">
-            <label for="destination">Destination ICAO</label>
-            <input id="destination" name="destination" type="text" placeholder="SBGR" value="{{ flight_info.destination if flight_info else '' }}" required spellcheck="false">
-          </div>
           <button class="search-button" type="submit">Check flight <span aria-hidden="true">&rarr;</span></button>
         </form>
+        <p class="search-help">Enter your airline and flight number. We'll find the route.</p>
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
       </section>
       {% if flight_info %}
       <section id="result" class="results" aria-labelledby="result-title" aria-live="polite">
@@ -60,9 +54,18 @@
           <h2 id="result-title" class="eyebrow">Flight history</h2>
           <span class="flight-reference">{{ flight_info.airline }} &middot; {{ flight_info.flight }}</span>
         </div>
+        {% if results|length > 1 %}
+          <p class="multiple-routes">{{ results|length }} historical routes found for this flight. Each route's statistics are shown separately.</p>
+        {% endif %}
+        {% for result in results %}
+        {% set flight = result.flight %}
+        {% set origin_airport = result.origin_airport %}
+        {% set destination_airport = result.destination_airport %}
+        <div class="route-result">
         <div class="flight-route">
           <div class="airport">
-            <strong class="airport-code">{{ flight_info.origin }}</strong>
+            <p class="airport-label">Origin</p>
+            <strong class="airport-code">{{ result.origin }}</strong>
             {% if origin_airport %}
               <p class="airport-name">{{ origin_airport["name"] }}</p>
               <p class="airport-city">{{ origin_airport["city"] }}</p>
@@ -76,7 +79,8 @@
             <span class="route-line"></span><span class="route-dot"></span>
           </div>
           <div class="airport airport-destination">
-            <strong class="airport-code">{{ flight_info.destination }}</strong>
+            <p class="airport-label">Destination</p>
+            <strong class="airport-code">{{ result.destination }}</strong>
             {% if destination_airport %}
               <p class="airport-name">{{ destination_airport["name"] }}</p>
               <p class="airport-city">{{ destination_airport["city"] }}</p>
@@ -85,12 +89,11 @@
             {% endif %}
           </div>
         </div>
-        {% if flight is not none %}
         <div class="statistics">
-          <article class="stat-card" aria-labelledby="departure-title">
+          <article class="stat-card" aria-labelledby="departure-title-{{ loop.index }}">
             <div class="stat-heading">
               <span class="stat-icon" aria-hidden="true">&nearr;</span>
-              <h3 id="departure-title">Departure</h3>
+              <h3 id="departure-title-{{ loop.index }}">Departure</h3>
             </div>
             <div class="stat-metric">
               <strong>{{ "{:.2f}".format(flight["dep_percentage"]) }}<span class="unit">%</span></strong>
@@ -105,10 +108,10 @@
               {% endif %}
             </div>
           </article>
-          <article class="stat-card" aria-labelledby="arrival-title">
+          <article class="stat-card" aria-labelledby="arrival-title-{{ loop.index }}">
             <div class="stat-heading">
               <span class="stat-icon" aria-hidden="true">&searr;</span>
-              <h3 id="arrival-title">Arrival</h3>
+              <h3 id="arrival-title-{{ loop.index }}">Arrival</h3>
             </div>
             <div class="stat-metric">
               <strong>{{ "{:.2f}".format(flight["arr_percentage"]) }}<span class="unit">%</span></strong>
@@ -125,18 +128,21 @@
           </article>
         </div>
         <p class="result-note">January&ndash;July 2026 &middot; Delayed means more than 30 minutes late.</p>
+        </div>
         {% else %}
+          {% if not error %}
           <div class="empty-result" role="status">
             <h3>No historical data found</h3>
-            <p>We couldn't find this flight and route in the dataset. Check the airline ICAO, flight number, and airport codes, then try again.</p>
+            <p>We couldn't find this flight in the dataset. Check the airline ICAO and flight number, including any leading zeros, then try again.</p>
           </div>
-        {% endif %}
+          {% endif %}
+        {% endfor %}
       </section>
       {% else %}
       <section class="search-intro" aria-labelledby="search-intro-title">
         <p class="eyebrow">A little clarity before takeoff</p>
         <h2 id="search-intro-title">Every flight has a history.<br>Explore yours.</h2>
-        <p>Enter your flight details to see how often it departed and arrived late, and the average delay when it did.</p>
+        <p>Enter your airline ICAO and flight number to discover its route, how often it departed and arrived late, and the average delay when it did.</p>
       </section>
       {% endif %}
       <section id="about-data" class="about-data" aria-labelledby="about-title">
@@ -147,7 +153,7 @@
         <div class="about-copy">
           <p>Insights cover January&ndash;July 2026 and include completed flights with valid scheduled and actual departure and arrival times. Cancelled flights are excluded.</p>
           <p>A flight counts as delayed when it is more than 30 minutes late. Average minutes refer to those delayed flights. Historical performance does not guarantee your next flight's outcome.</p>
-          <p class="code-help">Use four-letter ICAO airport codes. Need help finding yours? <a href="https://opennav.com/">Look up an airport &nearr;</a></p>
+          <p class="code-help">Search with your airline's three-letter ICAO code and flight number. Airport codes, names, and cities appear automatically in the results.</p>
         </div>
       </section>
     </div>

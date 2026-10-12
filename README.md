@@ -2,7 +2,7 @@
 #### Video Demo: <URL HERE>
 #### Description:
 
-HoldingPattern is a flight history web application developed as a CS50 final project. It helps travelers answer a practical question before flying: how often has this flight been delayed, and how long were those delays? Users enter an airline ICAO code, flight number, and origin and destination ICAO airport codes. The application displays historical departure and arrival statistics alongside airport names and cities.
+HoldingPattern is a flight history web application developed as a CS50 final project. It helps travelers answer a practical question before flying: how often has this flight been delayed, and how long were those delays? Users enter an airline ICAO code and flight number. The application retrieves the origin and destination from SQLite and displays historical departure and arrival statistics alongside airport names and cities. If a flight number has multiple historical routes, each route is displayed separately.
 
 The goal is to turn flight records into understandable information. Departure and arrival are analyzed separately because a flight can leave late and recover time before landing. HoldingPattern presents historical performance, rather than live tracking or a guaranteed prediction of the next flight. Its dataset covers January through July 2026.
 
@@ -40,7 +40,7 @@ Records are grouped by airline ICAO, flight number, origin, and destination. Eac
 
 ## Search experience
 
-`GET /` displays the homepage. `POST /search` trims and uppercases submitted values, then performs a parameterized query for the exact flight and route. API Ninjas' `/v1/airports` endpoint supplies airport names and cities through ICAO lookups authenticated with an `X-Api-Key` header.
+`GET /` displays the homepage. `POST /search` trims and uppercases submitted values, then performs a parameterized query for the airline and flight number. Routes and their statistics come from the database; airport codes are no longer required as inputs. API Ninjas' `/v1/airports` endpoint supplies airport names and cities through ICAO lookups authenticated with an `X-Api-Key` header. Repeated airport codes within a search are looked up only once.
 
 The responsive frontend uses navy typography, blue accents, a cloud hero, and a floating search form. Separate departure and arrival cards display percentages and average minutes. Missing summaries produce a clear message, and missing airport details have a fallback. Historical coverage and the delay threshold are explained on the page.
 

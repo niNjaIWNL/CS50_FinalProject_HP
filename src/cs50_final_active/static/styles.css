@@ -38,7 +38,12 @@ h1 { max-width: 740px; margin: 21px 0 22px; font-family: var(--serif); font-size
 .hero-description { margin: 0; font-size: 20px; line-height: 1.5; color: #3e5a83; }
 .content { position: relative; }
 .search-panel { position: relative; margin-top: -78px; background: rgb(255 255 255 / 98%); border: 1px solid var(--border); border-radius: 15px; box-shadow: 0 14px 35px rgb(18 58 110 / 8%); padding: 30px; scroll-margin-top: 24px; }
-#flight-form { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(170px, .95fr); align-items: end; gap: 24px; }
+#flight-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1.2fr)) minmax(170px, .9fr); align-items: end; gap: 30px; }
+.search-help { margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.form-error { margin: 12px 0 0; color: #a32b35; font-size: 13px; }
+.multiple-routes { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.route-result + .route-result { margin-top: 35px; padding-top: 25px; border-top: 1px solid var(--border); }
+.airport-label { margin: 0 0 5px; color: #365582; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
 .form-field { min-width: 0; }
 .form-field label { display: block; margin-bottom: 10px; color: #365582; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
 .form-field input { width: 100%; min-width: 0; height: 56px; padding: 12px 18px; color: var(--ink); background: #fff; border: 1px solid #cbd8ea; border-radius: 6px; font-size: 16px; }
@@ -56,7 +61,7 @@ h1 { max-width: 740px; margin: 21px 0 22px; font-family: var(--serif); font-size
 .airport-code { display: block; font-family: var(--serif); font-size: clamp(54px, 6vw, 85px); font-weight: 400; line-height: 1; letter-spacing: -2px; }
 .airport-name { margin: 5px 0 0; font-family: var(--serif); font-size: 25px; line-height: 1.15; overflow-wrap: anywhere; }
 .airport-city { margin: 5px 0 0; color: var(--muted); font-family: var(--serif); font-size: 21px; }
-.route-connector { display: flex; align-items: center; gap: 10px; padding-top: 34px; color: var(--accent); }
+.route-connector { display: flex; align-items: center; gap: 10px; padding-top: 54px; color: var(--accent); }
 .route-dot { width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 50%; flex-shrink: 0; }
 .route-line { height: 1px; flex: 1; background: var(--accent); }
 .route-connector svg { width: 32px; height: 32px; flex-shrink: 0; }
@@ -121,7 +126,7 @@ h1 { max-width: 740px; margin: 21px 0 22px; font-family: var(--serif); font-size
   .airport-code { font-size: 50px; }
   .airport-name { font-size: 21px; }
   .airport-city { font-size: 18px; }
-  .route-connector { padding-top: 15px; }
+  .route-connector { padding-top: 35px; }
   .route-connector .route-dot, .route-connector .route-line { display: none; }
   .stat-card { padding: 17px 14px; gap: 9px; grid-template-columns: .9fr 1fr 1.1fr; }
   .stat-heading h3 { font-size: 20px; }
