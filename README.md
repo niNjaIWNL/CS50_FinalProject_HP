@@ -17,6 +17,10 @@ SQLite suits the project's local deployment and fixed historical dataset: it sto
 
 OpenAI Codex was used with model ChatGPT-6.1 Sol to generate code snippets for assistance and speed, assist with debugging, and provide explanations. The model was prompted with the project description, system design, architecture details, code snippets, and questions about Python, Flask, Pandas, SQLite, and Jinja2. The generated code was reviewed and tested before integration.
 
+API key access is restricted to the backend. The key is stored in the UV environment and passed to the API Ninjas endpoint through an `X-Api-Key` header. The frontend never sees the key, and the API Ninjas service does not return it in responses. 
+
+Secret development key is stored in the UV environment variable `SECRET_KEY`. Flask uses it to sign session cookies and protect against cross-site request forgery (CSRF) attacks. The key is not hardcoded in the source code or committed to version control.
+
 ## Technologies and project structure
 
 The project uses Python for backend development, Flask for HTTP requests routing, Jinja2 for HTML rendering, Python/pandas for data processing, Python's built-in `sqlite3` module for database management and query, and Requests for external REST APIs HTTP calls. UV manages dependencies and the virtual environment, while `uv.lock` records resolved package versions. Pytest supports automated checks, and Ruff is available for linting. Waitress is included as a WSGI deploymentserver dependency.
