@@ -1,7 +1,7 @@
 [project]
 name = "cs50-final-active"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "HoldingPattern is a full-stack and data analytical project to showcase skills learned in Harvard's CS50"
 readme = "README.md"
 authors = [
     { name = "niNjaIWNL", email = "marcoszillersantos@gmail.com" }
